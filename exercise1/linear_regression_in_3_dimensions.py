@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import tensorflow as tf
 
-path = 'E:\TDAT3025\Read_csv_files\Read_CSV.py'
+path = 'C:/Users/eirik/workspace python/TDAT3025/Read_csv_files/Read_CSV.py'
 url = 'https://gitlab.com/ntnu-tdat3025/regression/childgrowth-datasets/raw/master/day_length_weight.csv'
 
 import importlib.machinery
@@ -64,7 +64,7 @@ session.close()
 
 #Visulazation part
 fig = plt.figure()
-ax = plt.axes(projection='3d')
+ax = fig.add_subplot(111, projection='3d')
 ax.scatter3D(x_data, y_data, z_data, label='$(\\hat x^{(i)},\\hat y^{(i)})$')
 
 ax.set_xlabel('day')
@@ -86,7 +86,9 @@ class LinearRegressionModel_visualize:
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
 
 x = np.mat([[np.min(x_data)], [np.max(x_data)]])
-ax.scatter3D(x, model.f(x), 0, label='$y = f(x) = xW+b$')
+#for i in range(len(z_data)):
+#    ax.scatter3D(x_data[i][0], model.f(x_data[i][0]), z_data[i][0])
+ax.plot3D(x, model.f(x), label='$y = f(x) = xW+b$')
 
 ax.legend()
 plt.show()
