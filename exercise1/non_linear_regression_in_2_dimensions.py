@@ -34,7 +34,7 @@ class LinearRegressionModel:
         self.b = tf.Variable([[0.0]])
 
         # Predictor
-        f = (20*tf.sigmoid(-self.x)*(tf.matmul(self.x, self.W) + self.b))+31#tf.matmul(self.x, self.W) + self.b
+        f = (20*tf.sigmoid(self.x)*(tf.matmul(self.x, self.W) + self.b))+31#tf.matmul(self.x, self.W) + self.b
 
         # Uses Mean Squared Error, although instead of mean, sum is used.
         self.loss = tf.reduce_mean(tf.square(f - self.y))
@@ -63,11 +63,14 @@ compute_W, compute_b = W, b
 session.close()
 
 #Visulazation part
-fig = plt.figure()
-ax = plt.axes()
+fig, ax = plt.subplots()
 
-ax.plot(x_data, y_data, 'o', label='$(\\hat x^{(i)},\\hat y^{(i)})$')
-"""
+ax.plot(x_data, 
+        y_data, 
+        'o', 
+        label='$(\\hat x^{(i)},\\hat y^{(i)})$'
+        )
+
 class LinearRegressionModel_visualize:
     def __init__(self, W, b):
         self.W = W
@@ -75,7 +78,10 @@ class LinearRegressionModel_visualize:
 
     # Predictor
     def f(self, x):
-        return 20*(1/(1+np.exp(-x)))*((x*self.W) + self.b)+31
+        return (20*self.sigma(x)*(x*self.W + self.b))+31
+
+    def sigma(self, x):
+        return 1 / (1 + np.exp(-x))
 
     # Uses Mean Squared Error, although instead of mean, sum is used.
     def loss(self, x, y):
@@ -83,11 +89,18 @@ class LinearRegressionModel_visualize:
 
 
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
-"""
-#x = np.mat([[np.min(x_data)], [np.max(x_data)]])
-#ax.plot(x, model.f(x), label='$y = f(x) = xW+b$')
+
+x = np.mat([[np.min(x_data)], [np.max(x_data)]])
+
+ax.plot(x,
+        model.f(x),
+        color='orange',
+        label='$y = f(x) = 20*sigma*(xW+b)+31$'
+        )
+
+plt.xlim(np.min(x_data), np.max(x_data))
 
 #print('loss (numpy):', model.loss(x_data, y_data))
 
-#ax.legend()
+ax.legend()
 plt.show()

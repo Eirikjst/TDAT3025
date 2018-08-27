@@ -102,7 +102,7 @@ ax.plot(x.A.squeeze(),
         color='orange'
         )
 
-print('loss (numpy):', model.loss(x_data, y_data))
+print('loss(numpy):', model.loss(x_data, y_data))
 
 ax.legend()
 plt.show()
