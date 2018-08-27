@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import math as math
 
-path = 'C:/Users/eirik/workspace python/TDAT3025/Read_csv_files/Read_CSV.py'
+path = 'E:/TDAT3025/Read_csv_files/Read_CSV.py'
 url = 'https://gitlab.com/ntnu-tdat3025/regression/childgrowth-datasets/raw/master/day_head_circumference.csv'
 
 import importlib.machinery
@@ -63,12 +63,11 @@ compute_W, compute_b = W, b
 session.close()
 
 #Visulazation part
-fig, ax = plt.subplots()
+fig = plt.figure()
+ax = plt.axes()
 
-#ax.plot(x_data, y_data, label='$(\\hat x^{(i)},\\hat y^{(i)})$')
-ax.set_xlabel('length')
-ax.set_ylabel('weight')
-
+ax.plot(x_data, y_data, 'o', label='$(\\hat x^{(i)},\\hat y^{(i)})$')
+"""
 class LinearRegressionModel_visualize:
     def __init__(self, W, b):
         self.W = W
@@ -76,7 +75,7 @@ class LinearRegressionModel_visualize:
 
     # Predictor
     def f(self, x):
-        return (20*(1/(1+math.exp(x)))*((x*self.W) + self.b))+31
+        return 20*(1/(1+np.exp(-x)))*((x*self.W) + self.b)+31
 
     # Uses Mean Squared Error, although instead of mean, sum is used.
     def loss(self, x, y):
@@ -84,11 +83,11 @@ class LinearRegressionModel_visualize:
 
 
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
-
+"""
 #x = np.mat([[np.min(x_data)], [np.max(x_data)]])
 #ax.plot(x, model.f(x), label='$y = f(x) = xW+b$')
 
-print('loss (numpy):', model.loss(x_data, y_data))
+#print('loss (numpy):', model.loss(x_data, y_data))
 
-ax.legend()
+#ax.legend()
 plt.show()
