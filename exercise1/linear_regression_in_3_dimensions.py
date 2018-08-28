@@ -51,7 +51,7 @@ session = tf.Session()
 session.run(tf.global_variables_initializer())
 
 #first try 500, second 5000
-for epoch in range(5000):
+for epoch in range(50000):
     session.run(minimize_operation, {model.x: x_data, model.y: y_data})
 
 # Evaluate training accuracy
@@ -69,7 +69,7 @@ ax.plot(x_data[:, 0].A.squeeze(),
         y_data[:, 0].A.squeeze(),
         z_data[:, 0].A.squeeze(),
         'o',
-        label='$(\\hat x_1^{(i)}, \\hat x_2^{(i)},\\hat y^{(i)})$',
+        label='$(\\hat x^{(i)}, \\hat y^{(i)},\\hat z^{(i)})$',
         color='blue'
         )
 
