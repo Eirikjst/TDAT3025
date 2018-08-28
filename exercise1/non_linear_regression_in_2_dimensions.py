@@ -10,7 +10,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-import math as math
 
 path = 'C:/Users/eirik/workspace python/TDAT3025/Read_csv_files/Read_CSV.py'
 url = 'https://gitlab.com/ntnu-tdat3025/regression/childgrowth-datasets/raw/master/day_head_circumference.csv'
@@ -21,7 +20,7 @@ csv = loader.load_module('Read_csv_files')
 data = csv.ReadCSV(url).read_csv_from_url()
 
 #print(data.size)
-x_data, y_data = np.mat(data[0:,[0]]), np.mat(data[0:,[1]])
+x_data, y_data = np.transpose(np.mat(data[:, 0])), np.transpose(np.mat(data[:, 1]))#np.mat(data[0:,[0]]), np.mat(data[0:,[1]])
 
 class LinearRegressionModel:
     def __init__(self):
@@ -34,7 +33,7 @@ class LinearRegressionModel:
         self.b = tf.Variable([[0.0]])
 
         # Predictor
-        f = (20*tf.sigmoid(-self.x)*(tf.matmul(self.x, self.W) + self.b))+31#tf.matmul(self.x, self.W) + self.b
+        f = 20 * tf.sigmoid(tf.matmul(self.x, self.W) + self.b) + 31
 
         # Uses Mean Squared Error, although instead of mean, sum is used.
         self.loss = tf.reduce_mean(tf.square(f - self.y))
@@ -65,9 +64,11 @@ session.close()
 #Visulazation part
 fig, ax = plt.subplots()
 
-ax.plot(x_data, y_data, 'o', label='$(\\hat x^{(i)},\\hat y^{(i)})$')
-ax.set_xlabel('day')
-ax.set_ylabel('head circumference')
+ax.plot(x_data, 
+        y_data, 
+        'o', 
+        label='$(\\hat x^{(i)},\\hat y^{(i)})$'
+        )
 
 class LinearRegressionModel_visualize:
     def __init__(self, W, b):
@@ -76,7 +77,10 @@ class LinearRegressionModel_visualize:
 
     # Predictor
     def f(self, x):
-        return (20*(1/(1+np.exp(-x)))*((x*self.W) + self.b))+31
+        return 20 * self.sigma(x * self.W + self.b) + 31
+
+    def sigma(self, t):
+        return 1 / (1 + np.exp(-t))
 
     # Uses Mean Squared Error, although instead of mean, sum is used.
     def loss(self, x, y):
@@ -85,13 +89,15 @@ class LinearRegressionModel_visualize:
 
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
 
-x = np.mat([[np.min(x_data)], [np.max(x_data)]])
-print(np.ravel(model.f(x[0][0])), model.f(x[1][0]))
+x = np.linspace(np.min(x_data), np.max(x_data)).reshape(-1, 1)
 
-#for i in range(len(x)):
-ax.plot(np.ravel(x), np.ravel(model.f(x)), label='$y = f(x) = xW+b$')
+ax.plot(x,
+        model.f(x),
+        color='orange',
+        label='$y = f(x) = 20\sigma(xW+b)+31$'
+        )
 
-#print('loss (numpy):', model.loss(x_data, y_data))
+print('loss (numpy):', model.loss(x_data, y_data))
 
 ax.legend()
 plt.show()

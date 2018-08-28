@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-path = 'C:/Users/eirik/workspace python/TDAT3025/Read_csv_files/Read_CSV.py'
+path = 'E:/TDAT3025/Read_csv_files/Read_CSV.py'
 url = 'https://gitlab.com/ntnu-tdat3025/regression/childgrowth-datasets/raw/master/length_weight.csv'
 
 import importlib.machinery
@@ -69,7 +69,12 @@ session.close()
 #Visulazation part
 fig, ax = plt.subplots()
 
-ax.plot(x_data, y_data, 'o', label='$(\\hat x^{(i)},\\hat y^{(i)})$')
+ax.plot(x_data,
+        y_data,
+        'o',
+        label='$(\\hat x^{(i)},\\hat y^{(i)})$'
+        )
+
 ax.set_xlabel('length')
 ax.set_ylabel('weight')
 
@@ -91,9 +96,13 @@ class LinearRegressionModel_visualize:
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
 
 x = np.mat([[np.min(x_data)], [np.max(x_data)]])
-ax.plot(x, model.f(x), label='$y = f(x) = xW+b$')
 
-print('loss (numpy):', model.loss(x_data, y_data))
+ax.plot(x,
+        model.f(x),
+        label='$y = f(x) = xW+b$'
+        )
+
+print('loss(numpy):', model.loss(x_data, y_data))
 
 ax.legend()
 plt.show()

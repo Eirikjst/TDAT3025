@@ -65,7 +65,14 @@ session.close()
 #Visulazation part
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-ax.scatter3D(x_data, y_data, z_data, label='$(\\hat x^{(i)},\\hat y^{(i)})$')
+ax.plot(x_data[:, 0].A.squeeze(),
+        y_data[:, 0].A.squeeze(),
+        z_data[:, 0].A.squeeze(),
+        'o',
+        label='$(\\hat x_1^{(i)}, \\hat x_2^{(i)},\\hat y^{(i)})$',
+        color='blue'
+        )
+
 
 ax.set_xlabel('day')
 ax.set_ylabel('length')
@@ -86,9 +93,16 @@ class LinearRegressionModel_visualize:
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
 
 x = np.mat([[np.min(x_data)], [np.max(x_data)]])
-for i in range(len(z_data)):
-    ax.scatter3D(x_data[i][0], model.f(x_data[i][0]), z_data[i][0])
-#ax.plot(x, model.f(x), z_data, label='$y = f(x) = xW+b$')
+z = np.mat([[np.min(z_data)], [np.max(z_data)]])
+
+ax.plot(x.A.squeeze(),
+        model.f(x).A.squeeze(),
+        z.A.squeeze(),
+        label='$y = f(x) = xW+b$',
+        color='orange'
+        )
+
+print('loss(numpy):', model.loss(x_data, y_data))
 
 ax.legend()
 plt.show()
