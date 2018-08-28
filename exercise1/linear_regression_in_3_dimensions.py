@@ -86,9 +86,9 @@ class LinearRegressionModel_visualize:
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
 
 x = np.mat([[np.min(x_data)], [np.max(x_data)]])
-#for i in range(len(z_data)):
-#    ax.scatter3D(x_data[i][0], model.f(x_data[i][0]), z_data[i][0])
-ax.plot3D(x, model.f(x), label='$y = f(x) = xW+b$')
+for i in range(len(z_data)):
+    ax.scatter3D(x_data[i][0], model.f(x_data[i][0]), z_data[i][0])
+#ax.plot(x, model.f(x), z_data, label='$y = f(x) = xW+b$')
 
 ax.legend()
 plt.show()

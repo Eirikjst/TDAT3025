@@ -65,9 +65,9 @@ session.close()
 #Visulazation part
 fig, ax = plt.subplots()
 
-#ax.plot(x_data, y_data, label='$(\\hat x^{(i)},\\hat y^{(i)})$')
-ax.set_xlabel('length')
-ax.set_ylabel('weight')
+ax.plot(x_data, y_data, 'o', label='$(\\hat x^{(i)},\\hat y^{(i)})$')
+ax.set_xlabel('day')
+ax.set_ylabel('head circumference')
 
 class LinearRegressionModel_visualize:
     def __init__(self, W, b):
@@ -76,7 +76,7 @@ class LinearRegressionModel_visualize:
 
     # Predictor
     def f(self, x):
-        return (20*(1/(1+math.exp(x)))*((x*self.W) + self.b))+31
+        return (20*(1/(1+np.exp(-x)))*((x*self.W) + self.b))+31
 
     # Uses Mean Squared Error, although instead of mean, sum is used.
     def loss(self, x, y):
@@ -85,10 +85,13 @@ class LinearRegressionModel_visualize:
 
 model = LinearRegressionModel_visualize(np.mat(compute_W), np.mat(compute_b))
 
-#x = np.mat([[np.min(x_data)], [np.max(x_data)]])
-#ax.plot(x, model.f(x), label='$y = f(x) = xW+b$')
+x = np.mat([[np.min(x_data)], [np.max(x_data)]])
+print(np.ravel(model.f(x[0][0])), model.f(x[1][0]))
 
-print('loss (numpy):', model.loss(x_data, y_data))
+#for i in range(len(x)):
+ax.plot(np.ravel(x), np.ravel(model.f(x)), label='$y = f(x) = xW+b$')
+
+#print('loss (numpy):', model.loss(x_data, y_data))
 
 ax.legend()
 plt.show()
