@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-path = 'E:/TDAT3025/Read_csv_files/Read_CSV.py'
+path = 'C:/Users/eirik/workspace python/TDAT3025/Read_csv_files/Read_CSV.py'
 url = 'https://gitlab.com/ntnu-tdat3025/regression/childgrowth-datasets/raw/master/length_weight.csv'
 
 import importlib.machinery
