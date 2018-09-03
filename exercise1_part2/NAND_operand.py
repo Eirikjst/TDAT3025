@@ -56,51 +56,6 @@ b_init = np.mat([0.00124884])
 # Visulazation part
 def sigmoid(t):
     return 1 / (1 + np.exp(-t))
-        # Model input
-        self.x = tf.placeholder(tf.float32)
-        self.y = tf.placeholder(tf.float32)
-
-        # Model variables
-        self.W = tf.Variable([[0.0], [0.0]])
-        self.b = tf.Variable([[0.0]])
-
-        # Logits
-        logits = tf.matmul(self.x, self.W) + self.b
-
-        # Predictor
-        f = tf.sigmoid(logits)
-
-        # Uses Cross Entropy
-        self.loss = tf.losses.sigmoid_cross_entropy(self.y, logits)
-
-
-model = SigmoidModel()
-
-# Training: adjust the model so that its loss is minimized
-minimize_operation = tf.train.GradientDescentOptimizer(0.000001).minimize(model.loss)
-
-# Create session object for running TensorFlow operations
-session = tf.Session()
-
-# Initialize tf.Variable objects
-session.run(tf.global_variables_initializer())
-
-for epoch in range(5000):
-    session.run(minimize_operation, {model.x: x_train, model.y: y_train})
-
-# Evaluate training accuracy
-W, b, loss = session.run([model.W, model.b, model.loss], {
-                         model.x: x_train, model.y: y_train})
-print("W = %s, b = %s, loss = %s" % (W, b, loss))
-
-session.close()
-
-W_init = np.mat([[0.00062432], [0.00062432]])
-b_init = np.mat([0.00124884])
-
-# Visulazation part
-def sigmoid(t):
-    return 1 / (1 + np.exp(-t))
 
 class SigmoidModel_visualize:
     def __init__(self, W=W_init.copy(), b=b_init.copy()):
