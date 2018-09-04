@@ -6,19 +6,18 @@ import tensorflow as tf
 x_ = tf.placeholder(tf.float32, shape=[4,2], name="x-input")
 y_ = tf.placeholder(tf.float32, shape=[4,1], name="y-input")
 
-Theta1 = tf.Variable(tf.random_uniform([2,2], -1, 1), name="Theta1")
-Theta2 = tf.Variable(tf.random_uniform([2,1], -1, 1), name="Theta2")
+W1 = tf.Variable(tf.random_uniform([2,2], -1, 1), name="W1")
+W2 = tf.Variable(tf.random_uniform([2,1], -1, 1), name="W2")
 
-Bias1 = tf.Variable(tf.zeros([2]), name="Bias1")
-Bias2 = tf.Variable(tf.zeros([1]), name="Bias2")
+b1 = tf.Variable(tf.zeros([2]), name="b1")
+b2 = tf.Variable(tf.zeros([1]), name="b2")
 
-A2 = tf.sigmoid(tf.matmul(x_, Theta1) + Bias1)
-Hypothesis = tf.sigmoid(tf.matmul(A2, Theta2) + Bias2)
+f1 = tf.sigmoid(tf.matmul(x_, W1) + b1)
+f2 = tf.sigmoid(tf.matmul(f1, W2) + b2)
 
-cost = tf.reduce_mean(( (y_ * tf.log(Hypothesis)) + 
-        ((1 - y_) * tf.log(1.0 - Hypothesis)) ) * -1)
+loss = tf.reduce_mean(( (y_ * tf.log(f2)) + ((1 - y_) * tf.log(1.0 - f2)) ) * -1)
 
-train_step = tf.train.GradientDescentOptimizer(0.01).minimize(cost)
+minimize_operation = tf.train.GradientDescentOptimizer(0.01).minimize(loss)
 
 XOR_X = [[0,0],[0,1],[1,0],[1,1]]
 XOR_Y = [[0],[1],[1],[0]]
@@ -27,15 +26,15 @@ init = tf.global_variables_initializer()
 sess = tf.Session()
 sess.run(init)
 
-for i in range(100000):
-        sess.run(train_step, feed_dict={x_: XOR_X, y_: XOR_Y})
-        if i % 10000 == 0:
+for i in range(500000):
+        sess.run(minimize_operation, feed_dict={x_: XOR_X, y_: XOR_Y})
+        if i % 100000 == 0:
             print('Epoch ', i)
-            print('Hypothesis ', sess.run(Hypothesis, feed_dict={x_: XOR_X, y_: XOR_Y}))
-            print('Theta1 ', sess.run(Theta1))
-            print('Bias1 ', sess.run(Bias1))
-            print('Theta2 ', sess.run(Theta2))
-            print('Bias2 ', sess.run(Bias2))
-            print('cost ', sess.run(cost, feed_dict={x_: XOR_X, y_: XOR_Y}))
+            print('f2:\n ', sess.run(f2, feed_dict={x_: XOR_X, y_: XOR_Y}))
+            print('W1:\n ', sess.run(W1))
+            print('b1:\n ', sess.run(b1))
+            print('W2:\n ', sess.run(W2))
+            print('b2:\n ', sess.run(b2))
+            print('loss: ', sess.run(loss, feed_dict={x_: XOR_X, y_: XOR_Y}))
 
 sess.close()
