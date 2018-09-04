@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import tensorflow as tf
 
-x_train = np.transpose(np.mat([[0, 0, 1, 1], [0, 1, 0, 1]]))
-y_train = np.transpose(np.mat([[1], [1], [1], [0]]))
+x_train = np.mat([[0, 0], [0, 1], [1, 0], [1, 1]])
+y_train = np.mat([[1], [1], [1], [0]])
 
 class SigmoidModel:
     def __init__(self):
@@ -32,7 +32,7 @@ class SigmoidModel:
 model = SigmoidModel()
 
 # Training: adjust the model so that its loss is minimized
-minimize_operation = tf.train.GradientDescentOptimizer(0.000001).minimize(model.loss)
+minimize_operation = tf.train.GradientDescentOptimizer(0.0001).minimize(model.loss)
 
 # Create session object for running TensorFlow operations
 session = tf.Session()
@@ -40,6 +40,9 @@ session = tf.Session()
 # Initialize tf.Variable objects
 session.run(tf.global_variables_initializer())
 
+
+#200000, W: -1.0210084, b: 1.9184799
+#500000, W: -2.026981, b: 3.308494
 for epoch in range(5000):
     session.run(minimize_operation, {model.x: x_train, model.y: y_train})
 
@@ -50,8 +53,8 @@ print("W = %s, b = %s, loss = %s" % (W, b, loss))
 
 session.close()
 
-W_init = np.mat([[0.00062432], [0.00062432]])
-b_init = np.mat([0.00124884])
+W_init = np.mat([[-2.026981], [-2.026981]])
+b_init = np.mat([3.308494])
 
 # Visulazation part
 def sigmoid(t):

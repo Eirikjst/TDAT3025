@@ -40,6 +40,9 @@ session = tf.Session()
 # Initialize tf.Variable objects
 session.run(tf.global_variables_initializer())
 
+#300000, W: -3.3970842, b: 1.449266
+#400000, W: -3.9507854, b: 1.7375367
+#500000, W: -4.3988886, b: 1.967955
 for epoch in range(5000):
     session.run(minimize_operation, {model.x: x_data, model.y: y_data})
 
@@ -47,8 +50,8 @@ for epoch in range(5000):
 W, b, loss = session.run([model.W, model.b, model.loss], {model.x: x_data, model.y: y_data})
 print("W = %s, b = %s, loss = %s" % (W, b, loss))
 
-W_init = np.mat([[-0.08125252]])
-b_init = np.mat([[0.00245559]])
+W_init = np.mat([[-4.3988886]])
+b_init = np.mat([[1.967955]])
 
 
 def sigmoid(t):
@@ -79,7 +82,7 @@ ax.plot(x_data,
         label='$(\\hat x^{(i)},\\hat y^{(i)})$'
         )
 
-x = np.linspace(-0.25, 1.25, 10).reshape(-1, 1)
+x = np.linspace(0, 1, 10).reshape(-1, 1)
 
 ax.plot(x,
         model.f(x),
