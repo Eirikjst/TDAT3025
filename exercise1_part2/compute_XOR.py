@@ -1,6 +1,3 @@
-import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
 import tensorflow as tf
 
 x_ = tf.placeholder(tf.float32, shape=[4,2], name="x-input")
