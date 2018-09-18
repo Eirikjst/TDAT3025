@@ -22,13 +22,16 @@ class LongShortTermMemoryModel:
 
         # Model operations
         lstm, self.out_state = tf.nn.dynamic_rnn(cell, self.x, initial_state=self.in_state)  # lstm has shape: [batch_size, max_time, cell_state_size]
+        #self.out_state = tf.reshape(self.out_state, [-1, 128])
 
         # Logits, where tf.einsum multiplies a batch of txs matrices (lstm) with W
         logits = tf.nn.bias_add(tf.einsum('bts,se->bte', lstm, W), b)  # b: batch, t: time, s: state, e: encoding
-        #logits = tf.nn.bias_add(tf.matmul(, W), b)
+
+        #logits = tf.nn.bias_add(tf.matmul(tf.reshape(lstm, [-1, 13]), W), b)
 
         # Predictor
         self.f = tf.nn.softmax(logits)
+        #self.f = tf.reshape(self.f, [-1, 13])
 
         # Cross Entropy loss
         self.loss = tf.losses.softmax_cross_entropy(self.y, logits)
@@ -95,6 +98,7 @@ x_train = [
     char_encodings[11], char_encodings[8], char_encodings[7], char_encodings[0], # 'son '
     ] # 'hat  rat  cat  flat matt cap  son '
 
+
 y_train = [
     char_encodings[4], char_encodings[1], char_encodings[12], char_encodings[0], # 'hat '
     char_encodings[0],  # ' '
@@ -111,7 +115,6 @@ y_train = [
     char_encodings[11], char_encodings[8], char_encodings[7], char_encodings[0], # 'son '
     char_encodings[0],  # ' '
 ]
-
 '''
 y_train = [
     char_encodings[13], char_encodings[13], char_encodings[13], char_encodings[13], # 'hat '
@@ -146,19 +149,18 @@ session.run(tf.global_variables_initializer())
 zero_state = session.run(model.in_state, {model.batch_size: 1})
 
 for epoch in range(500):
-    session.run(minimize_operation, {model.batch_size: 1, model.x: [x_train], model.y: [y_train], model.in_state: zero_state})
+    session.run(minimize_operation, {model.batch_size: 4, model.x: [x_train], model.y: [y_train], model.in_state: zero_state})
 
-    if epoch % 10 == 9:
+    if epoch % 100 == 9:
         print("epoch", epoch)
         print("loss", session.run(model.loss, {model.batch_size: 1, model.x: [x_train], model.y: [y_train], model.in_state: zero_state}))
 
         # Generate characters from the initial characters 'rt '
         state = session.run(model.in_state, {model.batch_size: 1})
         text = 'rt '
-        y, state = session.run([model.f, model.out_state], {model.batch_size: 3, model.x: [[char_encodings[10]]], model.in_state: state}) # 'r'
-        y, state = session.run([model.f, model.out_state], {model.batch_size: 3, model.x: [[char_encodings[12]]], model.in_state: state}) # 't'
-        y, state = session.run([model.f, model.out_state], {model.batch_size: 3, model.x: [[char_encodings[0]]], model.in_state: state}) # ' '
-        #y, state = session.run([model.f, model.out_state], {model.batch_size: 3, model.x: [[char_encodings[0]]], model.in_state: state}) # ' '
+        y, state = session.run([model.f, model.out_state], {model.batch_size: 4, model.x: [[char_encodings[10]]], model.in_state: state}) # 's'
+        y, state = session.run([model.f, model.out_state], {model.batch_size: 4, model.x: [[char_encodings[12]]], model.in_state: state}) # 't'
+        y, state = session.run([model.f, model.out_state], {model.batch_size: 4, model.x: [[char_encodings[0]]], model.in_state: state}) # ' '
         #y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: [[char_encodings[1]]], model.in_state: state}) # 'a'
         #y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: [[char_encodings[2]]], model.in_state: state}) # 'c'
         #y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: [[char_encodings[3]]], model.in_state: state}) # 'f'
@@ -168,11 +170,14 @@ for epoch in range(500):
         #y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: [[char_encodings[7]]], model.in_state: state}) # 'n'
         #y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: [[char_encodings[8]]], model.in_state: state}) # 'o'
         #y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: [[char_encodings[9]]], model.in_state: state}) # 'p'
+        #y, state = session.run([model.f, model.out_state], {model.batch_size: 7, model.x: [[char_encodings[10]]], model.in_state: state}) # 'r'
         #y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: [[char_encodings[11]]], model.in_state: state}) # 's'
+        #y, state = session.run([model.f, model.out_state], {model.batch_size: 7, model.x: [[char_encodings[12]]], model.in_state: state}) # 't'
         text += index_to_char[y.argmax()]
         for c in range(50):
             y, state = session.run([model.f, model.out_state], {model.batch_size: 4, model.x: [[char_encodings[y.argmax()]]], model.in_state: state})
             text += index_to_char[y[0].argmax()]
+            #print(state[0][0].argmax())
         print(text)
 
 session.close()
