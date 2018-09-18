@@ -57,7 +57,8 @@ x_train = [
     char_encodings[6], # 'r'
     char_encodings[3], # 'l'
     char_encodings[7], # 'd'
-    ]  
+    ] # ' hello world'
+  
 y_train = [
     char_encodings[1], # 'h'
     char_encodings[2], # 'e'
@@ -71,7 +72,7 @@ y_train = [
     char_encodings[3], # 'l'
     char_encodings[7], # 'd'
     char_encodings[0], # ' '
-    ]
+    ] # 'hello world '
 
 model = LongShortTermMemoryModel(np.shape(char_encodings)[1])
 
