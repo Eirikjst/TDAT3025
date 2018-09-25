@@ -68,7 +68,7 @@ x_train = [
         char_encodings[3], char_encodings[5], char_encodings[1], char_encodings[12], # 'flat'
     ],
     [
-        char_encodings[6], char_encodings[1], char_encodings[12], char_encodings[12], # 'flat'
+        char_encodings[6], char_encodings[1], char_encodings[12], char_encodings[12], # 'matt'
     ],
     [
         char_encodings[2], char_encodings[1], char_encodings[9], char_encodings[0], # 'cap '
@@ -115,7 +115,7 @@ for epoch in range(500):
 
         state = session.run(model.in_state, {model.batch_size: 1})
         # Generate characters from the initial characters in function argument
-        x = generate_x('rats')
+        x = generate_x('rt ')
         y, state = session.run([model.f, model.out_state], {model.batch_size: 1, model.x: x, model.in_state: state})
         result = ' '
         for c in range(len(x)):
